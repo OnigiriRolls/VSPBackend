@@ -21,15 +21,16 @@ public class XMLParser extends DefaultHandler {
     private String day;
     private boolean isCurrency;
     private boolean isDay;
+    private boolean isMultiplied;
+    private float multiply;
     private String currentCurrency;
-    private Map<String, Double> jsonResult = new HashMap<>();
+    private Map<String, Float> jsonResult = new HashMap<>();
     private ArrayList<String> currencies;
 
     public XMLParser(ArrayList<String> currencies) {
         try {
             myHandler = this;
             SAXParserFactory factory = SAXParserFactory.newInstance();
-            //use default non-validating parser
             saxParser = factory.newSAXParser();
             this.currencies = currencies;
         } catch (Throwable t) {
@@ -70,6 +71,11 @@ public class XMLParser extends DefaultHandler {
                 currentCurrency = atts.getValue("currency");
             }
 
+            if (atts.getValue("multiplier") != null) {
+                isMultiplied = true;
+                multiply = Float.valueOf(atts.getValue("multiplier"));
+            }
+
         }
     }
 
@@ -90,8 +96,16 @@ public class XMLParser extends DefaultHandler {
         s = s.trim();
         if (!s.equals("")) {
             if (isCurrency && isDay) {
-                if (currencies == null || currencies.contains(currentCurrency))
-                    jsonResult.put(currentCurrency, Double.valueOf(s));
+                if (currencies == null || currencies.contains(currentCurrency)) {
+                    float aux = Float.valueOf(s);
+
+                    if (isMultiplied) {
+                        aux = aux * multiply;
+                        isMultiplied = false;
+                    }
+
+                    jsonResult.put(currentCurrency, aux);
+                }
             }
         }
     }
