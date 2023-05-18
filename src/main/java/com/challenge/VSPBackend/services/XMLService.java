@@ -2,16 +2,13 @@ package com.challenge.VSPBackend.services;
 
 import com.challenge.VSPBackend.exceptions.JSONException;
 import com.challenge.VSPBackend.parsers.XMLParser;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class XMLService {
 
-    @Value("${xml.endpoint.url}") // Retrieve the URL from application.properties or application.yml
+    @Value("${xml.endpoint.url}")
     private String xmlEndpointUrl;
     private ArrayList<String> currencies;
 
